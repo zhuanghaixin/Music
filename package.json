@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/zhuanghaixin/Music#readme",
   "dependencies": {
-    "leancloud-storage": "^3.14.1"
+    "leancloud-storage": "^3.14.1",
+    "qiniu-js": "^1.0.22"
   }
 }
