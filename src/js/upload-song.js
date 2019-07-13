@@ -56,12 +56,11 @@
                             link:sourceLink,
                             key:response.key
                         })
-                        window.app.newSong.active()
-                        window.app.songForm.reset({
+                        window.eventHub.emit('upload',{
+
                             link:sourceLink,
                             key:response.key
                         })
-
                     },
                     'Error': function (up, err, errTip) {
                         //上传出错时,处理相关的事情
@@ -75,5 +74,5 @@
 
     }
     controller.init(view,model)
-    window.app.uploadSong=controller
+    // window.app.uploadSong=controller
 }

@@ -4,7 +4,7 @@
         template:`
                <ul class="songList">
                 <li>歌曲1</li>
-                <li class="active">歌曲222222</li>
+                <li>歌曲222222</li>
                 <li>歌曲3333</li>
                 <li>歌曲4</li>
                 <li>歌曲555</li>
@@ -17,6 +17,9 @@
         `,
         render(data) {
             $(this.el).html(this.template)
+        },
+        clearActive(){
+            $(this.el).find('.active').removeClass('active')
         }
 
     }
@@ -27,8 +30,12 @@
             this.view=view
             this.model=model
             this.view.render(this.model.data)
+            window.eventHub.on('upload',(data)=>{
+                console.log('song List 得到了data')
+               this.view.clearActive()
+            })
         }
     }
     controller.init(view,model)
-    window.app.songList=controller
+    // window.app.songList=controller
 }
