@@ -3,27 +3,36 @@
         el:'#songList-container',
         template:`
                <ul class="songList">
-                <li>歌曲1</li>
-                <li>歌曲222222</li>
-                <li>歌曲3333</li>
-                <li>歌曲4</li>
-                <li>歌曲555</li>
-                <li>歌曲6</li>
-                <li>歌曲7</li>
-                <li>歌曲8</li>
-                <li>歌曲9</li>
-                <li>歌曲10</li>
+                
             </ul>
         `,
         render(data) {
-            $(this.el).html(this.template)
+            let $el=$(this.el)
+            $el.html(this.template)
+            let {songs}=data
+            console.log(songs)
+            let liList=songs.map((song)=> $('<li></li>').text(song.name))
+            console.log('liList');
+            console.log(liList);
+
+            console.log('el');
+            console.log( $el.find('ul'))
+            $el.find('ul').empty()
+            liList.map((domLi)=>{
+                $el.find('ul').append(domLi)
+            })
+            // $(this.el).html(this.template)
         },
         clearActive(){
             $(this.el).find('.active').removeClass('active')
         }
 
     }
-    let model={}
+    let model={
+        data: {
+            songs:[]
+        }
+    }
     let controller={
         init(view,model){
             console.log(this)
@@ -33,6 +42,15 @@
             window.eventHub.on('upload',(data)=>{
                 console.log('song List 得到了data')
                this.view.clearActive()
+            })
+            window.eventHub.on('create',(songData)=>{
+                console.log(1)
+                console.log(songData)
+                console.log(2)
+                this.model.data.songs.push(songData)
+                console.log(3);
+                this.view.render(this.model.data)
+                console.log(4);
             })
         }
     }
