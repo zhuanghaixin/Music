@@ -11,7 +11,7 @@
             $el.html(this.template)
             let {songs} = data
             // console.log(songs)
-            let liList = songs.map((song) => $('<li></li>').text(song.name))
+            let liList = songs.map((song) => $('<li></li>').text(song.name).attr('data-id',song.id))
             console.log('liList');
             // console.log(liList);
 
@@ -25,6 +25,11 @@
         },
         clearActive() {
             $(this.el).find('.active').removeClass('active')
+        },
+        activeItem(li){
+            $li=$(li)
+            $li.addClass('active').siblings().removeClass('active')
+            console.log( $li.addClass('active').siblings())
         }
 
     }
@@ -55,6 +60,12 @@
             this.view = view
             this.model = model
             this.view.render(this.model.data)
+            this.bindEventHub()
+            this.getAllSongs()
+            this.bindEvents()
+        },
+
+        bindEventHub(){
             window.eventHub.on('upload', (data) => {
                 console.log('song List 得到了data')
                 this.view.clearActive()
@@ -72,15 +83,27 @@
                 console.log(5)
 
             })
-            console.log(this)
-            this.model.find().then(()=>{
+        },
+        getAllSongs(){
+            return this.model.find().then(()=>{
                 console.log('----')
                 console.log(this.model.data)
                 this.view.render(this.model.data)
             })
-
-
+        },
+        bindEvents(){
+            $(this.view.el).on('click','li',(e)=>{
+                this.view.activeItem(e.currentTarget)
+                let songId=$(e.currentTarget).attr('data-id')
+                // console.log(songId)
+                window.eventHub.emit('select',{id:songId})
+            })
         }
+
+
+
+
+
     }
     controller.init(view, model)
     // window.app.songList=controller
