@@ -35,7 +35,7 @@
             let placeholders = ['name', 'singer','url','id']
             let html = this.template
             placeholders.map((string) => {
-                console.log(string)
+                // console.log(string)
                 html = html.replace(`__${string}__`, data[string] || '')
             })
             $(this.el).html(html)
