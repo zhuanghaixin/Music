@@ -83,6 +83,12 @@
                 console.log(5)
 
             })
+            window.eventHub.on('new',()=>{
+                console.log(',,,,,,,,,,,,,')
+                this.view.clearActive()
+
+                console.log(12333434)
+            })
         },
         getAllSongs(){
              this.model.find().then(()=>{

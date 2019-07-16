@@ -6,7 +6,6 @@
         }
         ,
         template: `
-        <h1>新建歌曲</h1>
         <form class="form">
             <div class="row">
                 <label>
@@ -32,15 +31,21 @@
         </form>
         `,
         render(data = {}) {
-            let placeholders = ['name', 'singer','url','id']
+            let placeholders = ['name', 'singer', 'url', 'id']
             let html = this.template
             placeholders.map((string) => {
                 // console.log(string)
                 html = html.replace(`__${string}__`, data[string] || '')
             })
             $(this.el).html(html)
+            if (data.id) {
+                $(this.el).prepend('<h1>编辑歌曲</h1>')
+            }
+            else {$(this.el).prepend('<h1>新建歌曲</h1>')
+                }
+
         },
-        reset(){
+        reset() {
 
             this.render({})
         }
@@ -55,23 +60,23 @@
         },
         create(data) {
             // 声明类型
-            var Song= AV.Object.extend('Song');
+            var Song = AV.Object.extend('Song');
             // 新建对象
             var song = new Song();
             // 设置名称
             song.set('name', data.name);
             song.set('singer', data.singer);
             song.set('url', data.url);
-            return song.save().then( (newSong)=>{
-               let {id,attributes}=newSong
-                Object.assign(this.data,{
-                    id:id,
-                    name:attributes.name,
-                    singer:attributes.singer,
-                    url:attributes.url
+            return song.save().then((newSong) => {
+                let {id, attributes} = newSong
+                Object.assign(this.data, {
+                    id: id,
+                    name: attributes.name,
+                    singer: attributes.singer,
+                    url: attributes.url
 
                 })
-            }, (error)=> {
+            }, (error) => {
                 console.error(error);
             });
 
@@ -87,12 +92,21 @@
             this.bindEvents()
             window.eventHub.on('upload', (data) => {
                 console.log('new form 得到了data')
-                this.model.data=data
+                this.model.data = data
                 this.view.render(this.model.data)
             })
-            window.eventHub.on('select',(data)=>{
+            window.eventHub.on('select', (data) => {
                 console.log('form得到了选中的列表数据')
-                this.model.data=data
+                this.model.data = data
+                this.view.render(this.model.data)
+            })
+            window.eventHub.on('new',()=>{
+                this.model.data={
+                    name: '',
+                    singer: '',
+                    url: '',
+                    id: ''
+                }
                 this.view.render(this.model.data)
             })
         },
@@ -108,13 +122,13 @@
                     data[string] = this.view.$el.find(`[name=${string}]`).val()
                 })
                 console.log(data)
-                this.model.create(data).then(()=>{
+                this.model.create(data).then(() => {
                     console.log('this.model.data')
                     console.log(this.model.data)
                     this.view.reset()
-                    let string=JSON.stringify(this.model.data)
-                    let object=JSON.parse(string)
-                    window.eventHub.emit('create',object)
+                    let string = JSON.stringify(this.model.data)
+                    let object = JSON.parse(string)
+                    window.eventHub.emit('create', object)
 
                 })
             })

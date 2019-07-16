@@ -21,12 +21,20 @@
                 console.log(data)
                 this.deactive()
             })
+            $(this.view.el).on('click',()=>{
+                this.active()
+                window.eventHub.emit('new')
+            })
+
         },
         active(){
+            console.log('this')
+            console.log(this)
             $(this.view.el).addClass('active')
+
         },
         deactive(){
-            $(this.view.el).removeClass('active')
+             $(this.view.el).removeClass('active')
         }
 
 
