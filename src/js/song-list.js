@@ -85,7 +85,7 @@
             })
         },
         getAllSongs(){
-            return this.model.find().then(()=>{
+             this.model.find().then(()=>{
                 console.log('----')
                 console.log(this.model.data)
                 this.view.render(this.model.data)
@@ -95,8 +95,17 @@
             $(this.view.el).on('click','li',(e)=>{
                 this.view.activeItem(e.currentTarget)
                 let songId=$(e.currentTarget).attr('data-id')
-                // console.log(songId)
-                window.eventHub.emit('select',{id:songId})
+                console.log(songId)
+                let data
+                let songs=this.model.data.songs
+                for(let i=0;i<songs.length;i++){
+                    if(songId===songs[i].id){
+                        data=songs[i]
+                       break
+                    }
+                }
+
+                window.eventHub.emit('select',JSON.parse(JSON.stringify(data)))
             })
         }
 

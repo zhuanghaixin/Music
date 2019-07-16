@@ -90,6 +90,11 @@
                 this.model.data=data
                 this.view.render(this.model.data)
             })
+            window.eventHub.on('select',(data)=>{
+                console.log('form得到了选中的列表数据')
+                this.model.data=data
+                this.view.render(this.model.data)
+            })
         },
         reset(data) {
             this.view.render(data)
