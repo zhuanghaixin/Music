@@ -79,6 +79,20 @@
 
                 console.log(12333434)
             })
+            window.eventHub.on('update',(song)=>{
+                let songs=this.model.data.songs
+
+                for(let i=0;i<songs.length;i++){
+                    if(songs[i].id===song.id){
+                        Object.assign(songs[i],song)
+                    }
+                    console.log('xxx')
+                }
+                console.log(11111111111111111111)
+                console.log('....')
+                console.log(this.model.data)
+                this.view.render(this.model.data)
+            })
         },
         getAllSongs(){
              this.model.find().then(()=>{
