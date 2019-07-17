@@ -98,11 +98,16 @@
             })
             window.eventHub.on('new',(data)=>{
                 console.log('new form 得到了data')
-                this.model.data=data||{
-                    name: '',
-                    singer: '',
-                    url: '',
-                    id: ''
+                console.log(this.model.data.id)
+                if(this.model.data.id){
+                    this.model.data={
+                        name: '',
+                        singer: '',
+                        url: '',
+                        id: ''
+                    }
+                }else{
+                    Object.assign(this.model.data,data)
                 }
                 this.view.render(this.model.data)
             })
