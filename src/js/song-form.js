@@ -84,24 +84,21 @@
     }
     let controller = {
         init(view, model) {
-            console.log(this)
+
             this.view = view
             this.view.init()
             this.model = model
             this.view.render(this.model.data)
             this.bindEvents()
-            window.eventHub.on('upload', (data) => {
-                console.log('new form 得到了data')
-                this.model.data = data
-                this.view.render(this.model.data)
-            })
+
             window.eventHub.on('select', (data) => {
                 console.log('form得到了选中的列表数据')
                 this.model.data = data
                 this.view.render(this.model.data)
             })
-            window.eventHub.on('new',()=>{
-                this.model.data={
+            window.eventHub.on('new',(data)=>{
+                console.log('new form 得到了data')
+                this.model.data=data||{
                     name: '',
                     singer: '',
                     url: '',
@@ -121,10 +118,8 @@
                 needs.map((string) => {
                     data[string] = this.view.$el.find(`[name=${string}]`).val()
                 })
-                console.log(data)
+
                 this.model.create(data).then(() => {
-                    console.log('this.model.data')
-                    console.log(this.model.data)
                     this.view.reset()
                     let string = JSON.stringify(this.model.data)
                     let object = JSON.parse(string)

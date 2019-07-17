@@ -8,7 +8,7 @@
     let model={}
     let controller={
         init(view,model){
-            console.log(this)
+
             this.view=view
             this.model=model
             this.initQiniu()
@@ -56,7 +56,7 @@
                             url:sourceLink,
                             name:response.key
                         })
-                        window.eventHub.emit('upload',{
+                        window.eventHub.emit('new',{
 
                             url:sourceLink,
                             name:response.key

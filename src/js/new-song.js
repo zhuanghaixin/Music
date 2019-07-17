@@ -13,23 +13,23 @@
             this.model=model
             this.active()
             this.view.render(this.model.data)
-            window.eventHub.on('upload',(data)=>{
+            window.eventHub.on('new',(data)=>{
                 console.log('new song 得到了data')
                 this.active()
             })
             window.eventHub.on('select',(data)=>{
-                console.log(data)
                 this.deactive()
             })
             $(this.view.el).on('click',()=>{
-                this.active()
+                console.log('this')
+                console.log(this)
+                // this.active()
                 window.eventHub.emit('new')
             })
 
         },
         active(){
-            console.log('this')
-            console.log(this)
+
             $(this.view.el).addClass('active')
 
         },
