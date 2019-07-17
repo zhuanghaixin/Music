@@ -9,9 +9,17 @@
         render(data) {
             let $el = $(this.el)
             $el.html(this.template)
-            let {songs} = data
+            let {songs,selectedSongId} = data
 
-            let liList = songs.map((song) => $('<li></li>').text(song.name).attr('data-id',song.id))
+            let liList = songs.map((song) =>
+            {
+                let $li= $('<li></li>').text(song.name).attr('data-id',song.id)
+                if(song.id===selectedSongId){
+                   $li.addClass('active')
+                }
+                return $li
+            }
+            )
 
             $el.find('ul').empty()
             liList.map((domLi) => {
@@ -30,7 +38,8 @@
     }
     let model = {
         data: {
-            songs: []
+            songs: [],
+            selectedSongId:null
         },
         find(){
             var query = new AV.Query('Song');
@@ -86,11 +95,8 @@
                     if(songs[i].id===song.id){
                         Object.assign(songs[i],song)
                     }
-                    console.log('xxx')
                 }
-                console.log(11111111111111111111)
-                console.log('....')
-                console.log(this.model.data)
+
                 this.view.render(this.model.data)
             })
         },
@@ -102,8 +108,10 @@
         },
         bindEvents(){
             $(this.view.el).on('click','li',(e)=>{
-                this.view.activeItem(e.currentTarget)
+                // this.view.activeItem(e.currentTarget)
                 let songId=$(e.currentTarget).attr('data-id')
+                this.model.data.selectedSongId=songId
+                this.view.render(this.model.data)
                 let data
                 let songs=this.model.data.songs
                 for(let i=0;i<songs.length;i++){
