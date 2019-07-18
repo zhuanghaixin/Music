@@ -37,44 +37,7 @@
 
 <div class="site-loading" id="siteLoading">
 </div>
-<style>
-    @keyframes loading {
-        0% {
-            transform: scale(1.0);
-        }
-        100% {
-            transform: scale(0.1);
-        }
-    }
 
-    .site-loading {
-        /*background-color: #f00;*/
-        visibility: hidden;
-        height: 100%;
-        width: 100%;
-        top: 0;
-        left: 0;
-        position: fixed;
-        z-index: 1;
-    }
-    .site-loading.active{
-        visibility: visible;
-    }
-    .site-loading:before {
-        content: '';
-        display: block;
-        width: 100px;
-        height: 100px;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        margin-left: -50px;
-        margin-top: -50px;
-        background-color: green;
-        border-radius: 50%;
-        animation: loading 1s linear infinite alternate-reverse;
-    }
-</style>
 <div id="uploadStatus"></div>
 <audio controls
        src="http://qiniuyun.zhuanghaixin.cn/%E3%82%B9%E3%83%92%E3%82%9A%E3%83%83%E3%83%84%20-%20ROBINSON.mp3"></audio>
