@@ -67,15 +67,21 @@
                         // 参考http://developer.qiniu.com/docs/v6/api/overview/up/response/simple-response.html
                         var domain = up.getOption('domain');
                         var response = JSON.parse(info.response);
+                        // console.log(response)
+                        let name_singer=response.key.split('-')
+                        let singer=name_singer[0].trim()
+                        let name=name_singer[1].trim().replace('.mp3','')
                         var sourceLink = 'http://' + domain + '/' + encodeURIComponent(response.key); //获取上传成功后的文件的Url
                         console.log({
                             url:sourceLink,
-                            name:response.key
+                            name:name,
+                            singer:singer
                         })
                         window.eventHub.emit('new',{
 
                             url:sourceLink,
-                            name:response.key
+                            name:name,
+                            singer:singer
                         })
                     },
                     'Error': function (up, err, errTip) {

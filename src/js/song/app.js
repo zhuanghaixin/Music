@@ -1,36 +1,57 @@
 {
     let view = {
-        el:'#app',
-        tempalte:`
+        el: '#app',
+        tempalte: `
         <audio src={{url}} controls></audio>
         <div>
         <button class="play">播放</button>
         <button class="pause">暂停</button>
         </div>
         `,
-        render(data){
-            $(this.el).html(this.tempalte.replace('{{url}}',data.url))
+        render(data) {
+            // $(this.el).html(this.tempalte.replace('{{url}}',data.url))
+            let {song, status} = data
+            console.log(song.cover);
+            $('.pageBefore').css('background-image', `url(${song.cover})`);
+            $(this.el).find('img.cover').attr('src', song.cover)
+            if($(this.el).find('audio').attr('src')!==song.url){
+                $(this.el).find('audio').attr('src', song.url)
+            }
+
+            if(status==='playing'){
+                $(this.el).find('.disc-container').addClass('playing')
+                $(this.el).find('.icon-wrapper').addClass('appear')
+            }else{
+                $(this.el).find('.disc-container').removeClass('playing')
+                $(this.el).find('.icon-wrapper').removeClass('appear')
+
+            }
+
+            console.log(2)
         },
-        play(){
-            let audio=$(this.el).find('audio')[0]
-            audio.play()
+        play() {
+            let audio = $(this.el).find('audio')[0].play()
         },
-        pause(){
-            let audio=$(this.el).find('audio')[0]
+        pause() {
+            let audio = $(this.el).find('audio')[0]
             audio.pause()
         }
     }
     let model = {
         data: {
-            id: '',
-            name: '',
-            singer: '',
-            url: ''
+            song: {
+                id: '',
+                name: '',
+                singer: '',
+                url: ''
+            },
+            status: 'pause'
+
         },
         get(id) {
             var query = new AV.Query('Song');
-            return query.get(id).then((song)=>{
-                Object.assign(this.data, {id:song.id,...song.attributes})
+            return query.get(id).then((song) => {
+                Object.assign(this.data.song, {id: song.id, ...song.attributes})
                 return song
             })
         }
@@ -71,21 +92,24 @@
             return id
         },
         bindEvents() {
-            $(this.view.el).on('click','.play',()=>{
-                console.log(1)
-                this.view.play()
-                console.log(2);
 
-            })
-            $(this.view.el).on('click','.pause',()=>{
-                console.log(1)
-                this.view.pause()
-                console.log(2);
+            $(this.view.el).on('click', () => {
+                if (this.model.data.status === 'pause') {
+                    this.model.data.status = 'playing'
+                    this.view.render(this.model.data)
+                    this.view.play()
+                } else {
+                    this.model.data.status = 'pause'
+                    this.view.render(this.model.data)
+                    this.view.pause()
+                    console.log(4);
+                }
 
             })
         }
+
     }
-    controller.init(view, model)
+controller.init(view, model)
 }
 
 

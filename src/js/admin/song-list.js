@@ -14,6 +14,7 @@
             let liList = songs.map((song) =>
             {
                 let $li= $('<li></li>').text(song.name).attr('data-id',song.id)
+
                 if(song.id===selectedSongId){
                    $li.addClass('active')
                 }
@@ -31,7 +32,7 @@
             $(this.el).find('.active').removeClass('active')
         },
         activeItem(li){
-            $li=$(li)
+             $li=$(li)
             $li.addClass('active').siblings().removeClass('active')
         }
 
