@@ -16,6 +16,14 @@
             $(this.el).find('img.cover').attr('src', song.cover)
             if($(this.el).find('audio').attr('src')!==song.url){
                 $(this.el).find('audio').attr('src', song.url)
+                    console.log('暂停1');
+                let audio=$(this.el).find('audio')[0]
+                audio.onended=()=>{
+                    window.eventHub.emit('songEnd',)
+                }
+
+
+
             }
 
             if(status==='playing'){
@@ -61,12 +69,17 @@
             this.view = view
             this.model = model
             let id = this.getSongId()
-            console.log(id)
+            console.log('this.model.data.status')
+            console.log(this.model.data.status)
             this.model.get(id).then((data) => {
                 console.log(data)
                 console.log(this.model.data)
+                this.model.data.status = 'playing'
                 this.view.render(this.model.data)
+
+
             })
+
             this.bindEvents()
 
         },
@@ -105,6 +118,16 @@
                     console.log(4);
                 }
 
+            })
+            window.eventHub.on('songEnd',()=>{
+                this.model.data.status = 'pause'
+                console.log('暂停2');
+
+                this.view.render(model.data)
+                console.log('暂停3');
+
+                this.view.pause()
+                console.log('暂停4');
             })
         }
 
