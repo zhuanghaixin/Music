@@ -74,37 +74,34 @@
         showLyric(time) {
             console.log(time)
             let allP = this.$el.find('.lyric>.lines>p')
-            this.$el.find('.lyric').css('border','1px solid red')
+            // this.$el.find('.lyric').css('border','1px solid red')
             let p
             for (let i = 0; i < allP.length; i++) {
-                if (i === allP.length - 1) {
-                    console.log(allP[i])
-                    p=allP[i]
-                    break
-                } else {
+
+
                     let previousTime = allP.eq(i).attr('data-time')
                     let nextTime = allP.eq(i + 1).attr('data-time')
                     if (previousTime <time && time < nextTime) {
                         console.log(allP[i])
                          p=allP[i]
+                        console.log(p);
+                        console.log('时间');
+                        let pHeight=p.getBoundingClientRect().top
+                        let linesHeight=this.$el.find('.lyric>.lines')[0].getBoundingClientRect().top
+                        let height=pHeight-linesHeight
+                        console.log(height);
+                        this.$el.find('.lyric>.lines').css({
+                            transform:`translateY(${- (height-25)}px)`
+                        })
+                        $(p).addClass('active').siblings().removeClass('active')
 
                         break
                     }
 
-                }
+
 
 
             }
-            console.log(p);
-            console.log('时间');
-            let pHeight=p.getBoundingClientRect().top
-            let linesHeight=this.$el.find('.lyric>.lines')[0].getBoundingClientRect().top
-            let height=pHeight-linesHeight
-            console.log(height);
-            this.$el.find('.lyric>.lines').css({
-                transform:`translateY(${- (height-25)}px)`
-            })
-            $(p).addClass('active').siblings().removeClass('active')
 
 
         }

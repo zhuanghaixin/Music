@@ -12,7 +12,7 @@
 <body>
 <div class="pageBefore"></div>
 <div class="page" id="app">
-    <audio src="#" controls autoplay></audio>
+    <audio src="#"  autoplay></audio>
     <div class="disc-container">
         <img class="pointer" src="./img/needle.png" alt="">
         <div class="disc">
@@ -43,6 +43,12 @@
         <a class="main" href="#">下载</a>
     </div>
 </div>
+<script>
+    window.onerror=function(message,error) {
+        console.log('message')
+        alert(message);
+    }
+</script>
 <!--<script src="//at.alicdn.com/t/font_9dyko39vtiifi529.js"></script>-->
 <script src="../vendors/av-min.js"></script>
 <script src="./js/initializers/av.js"></script>
