@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>管理页面</title>
+    <link rel="stylesheet" href="../src/css/index.css">
+    <script src="../node_modules/leancloud-storage/dist/av-min.js"></script>
+    <script src="./js/initializers/av.js"></script>
+</head>
+<body>
+<div class="playlistForm-wrapper">
+    <h1>创建歌单</h1>
+    <form class="playlistForm">
+        <div class="row">
+            <label>歌单名<input type="text" name="name"> </label>
+
+        </div>
+        <div class="row">
+            <label>简介<textarea name="summary" id="" cols="30" rows="10"></textarea></label>
+        </div>
+        <div class="row">
+            <button type="submit">创建</button>
+        </div>
+    </form>
+</div>
+
+<div id="uploadStatus"></div>
+
+
+<script src="../node_modules/jquery/dist/jquery.min.js"></script>
+<script src="../vendors/moxie.js"></script>
+<script src="../node_modules/plupload/js/plupload.min.js"></script>
+<script src="../node_modules/qiniu-js/dist/qiniu.min.js"></script>
+<script src="js/admin/event-hub.js"></script>
+<script>
+    // 创建 post
+    var song = new AV.Object('Song');
+    song.set('name', '饿了……');
+    song.set('singer', '中午去哪吃呢？');
+
+    // 创建 comment
+    var playlist = new AV.Object('Playlist');
+    playlist.set('name', '测试简介2');
+    playlist.set('summary', '测试摘要2');
+
+    // 将 post 设为 comment 的一个属性值
+    song.set('dependent', playlist);
+
+    // 保存 comment 会同时保存 post
+    song.save();
+
+</script>
+<script>
+    {
+        let view={
+            el:'.playlistForm-wrapper',
+            init() {
+                this.$el = $(this.el)
+            }
+            ,
+        }
+        let model={
+            create(data){
+                var Playlist= AV.Object.extend('Playlist');
+                // 新建对象
+                var playist = new Playlist();
+                // 设置名称
+                playist.set('name', data.name);
+                playist.set('summary', data.summary);
+                playist.save().then((newPlaylist) => {
+                    console.log(newPlaylist);
+                    // let {id, attributes} = newPlaylist
+                // Object.assign(this.data, {
+                //     id: id,
+                //     name: attributes.name,
+                //     singer: attributes.singer,
+                //     url: attributes.url,
+                //     cover:attributes.cover,
+                //     lyrics:attributes.lyrics
+                //
+                // })
+                }, (error) => {
+                    console.error(error);
+                });
+            }
+        }
+        let controller={
+            init(view,model){
+                this.view=view
+                this.view.init()
+                this.model=model
+                this.bindEvents()
+            },
+            bindEvents(){
+                this.view.$el.on('submit','form',(e)=>{
+                    e.preventDefault()
+                    let data={}
+                    let form=this.view.$el.find('form').get(0)
+                    console.log(form.name.value.trim());
+                    console.log(form.summary.value.trim());
+                    let keys=['name','summary']
+                    keys.reduce((prev,item)=>{
+                        console.log('prev')
+                        console.log(prev)
+                        console.log('item')
+                        console.log(item)
+                        prev[item]=form[item].value
+                        return prev
+                    },data)
+                    console.log('data');
+                    console.log(data);
+                    console.log(1)
+                    this.model.create(data)
+                })
+            }
+        }
+        controller.init(view,model)
+    }
+</script>
+
+</body>
+</html>
